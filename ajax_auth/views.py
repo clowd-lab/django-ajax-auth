@@ -127,7 +127,7 @@ class RegisterView(JSONResponseMixin, View):
         password = self.request.POST['password']
 
         try:
-            user = get_user_model().objects.create_user(username=username, password=password)
+            user = get_user_model().objects.create_user(username, password=password)
             user = authenticate(username=username, password=password)
             login(self.request, user)
             context['success'] = True
