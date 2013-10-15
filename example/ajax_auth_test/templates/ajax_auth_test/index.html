@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Django Ajax Auth</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+<body>
+
+<div class="container">
+
+    <ul class="nav nav-tabs" id="signInTab">
+        <li class="active"><a href="#signin">Sign In</a></li>
+        <li><a href="#register">Register</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="signin">
+            <form class="form-horizontal" id="form-signin">
+                <h2 class="form-signin-heading">Please sign in</h2>
+                <input name="username" type="text" class="form-control" placeholder="Email address" autofocus>
+                <input name="password" type="password" class="form-control" placeholder="Password">
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            </form>
+        </div>
+        <div class="tab-pane" id="register">
+            <form class="form-horizontal" id="form-register">
+                <h2 class="form-register-heading">Please register</h2>
+                <input name="username" type="text" class="form-control" placeholder="Email address" autofocus>
+                <input name="password" type="password" class="form-control" placeholder="Password">
+                <input type="password" class="form-control" placeholder="Repeat Password">
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <h3>Result:</h3>
+
+    <div id="result"></div>
+
+</div>
+<!-- /container -->
+
+<!-- Include JQuery -->
+<script src="//code.jquery.com/jquery.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+
+<script>
+    jQuery(document).ready(function ($) {
+        $('#signInTab a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+
+        $('#form-signin').submit(function (e) {
+            e.preventDefault();
+            var jqxhr = $.post("ajax_auth/login/",
+                    $(this).serialize(),
+                    function (data) {
+                        $("#result").html(JSON.stringify(data));
+                    })
+                    .fail(function (err) {
+                        $("#result").html(JSON.stringify(err.responseJSON));
+                    });
+
+        });
+
+        $('#form-register').submit(function (e) {
+            e.preventDefault();
+            $.post("ajax_auth/register/",
+                    $(this).serialize(),
+                    function (data) {
+                        $("#result").html(JSON.stringify(data));
+                    })
+                    .fail(function (err) {
+                        $("#result").html(JSON.stringify(err.responseJSON));
+                    });
+        });
+
+    });
+</script>
+
+</body>
+</html>
