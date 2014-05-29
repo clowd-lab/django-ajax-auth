@@ -125,6 +125,12 @@ class RegisterView(JSONResponseMixin, View):
         context = {}
         username = self.request.POST['username']
         password = self.request.POST['password']
+        password_confirm = self.request.POST['password_confirm']
+
+        if password != password_confirm:
+            context['success'] = False
+            context['error_msg'] = 'Password does not match the confirm password.'
+            return self.render_to_json_response(context, HttpResponseBadRequest)
 
         try:
             user = get_user_model().objects.create_user(username, password=password)
